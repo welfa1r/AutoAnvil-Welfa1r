@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -62,7 +62,7 @@ final class AnvilExecutor {
     void tick(Minecraft mc) {
         if (finished) return;
         LocalPlayer player = mc.player;
-        if (player == null || mc.gameMode == null || !(mc.screen instanceof AnvilScreen)
+        if (player == null || mc.gameMode == null || !(mc.gui.screen() instanceof AnvilScreen)
                 || !(player.containerMenu instanceof AnvilMenu menu) || menu.containerId != containerId) {
             finish(join(tr("stop.closed"), progress()).withStyle(ChatFormatting.RED));
             return;
@@ -251,6 +251,6 @@ final class AnvilExecutor {
     }
 
     private static void click(Minecraft mc, AnvilMenu menu, int slot) {
-        mc.gameMode.handleInventoryMouseClick(menu.containerId, slot, 0, ClickType.QUICK_MOVE, mc.player);
+        mc.gameMode.handleContainerInput(menu.containerId, slot, 0, ContainerInput.QUICK_MOVE, mc.player);
     }
 }

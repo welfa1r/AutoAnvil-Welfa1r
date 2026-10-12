@@ -1,6 +1,6 @@
 # AutoAnvil
 
-Mod de cliente para **Fabric** (Minecraft **1.21.11**) que automatiza el encantado de equipo de netherite en el yunque. Eliges qué encantamientos quieres en cada pieza, abres un yunque y el mod coloca los libros y recoge los resultados por ti.
+Mod de cliente para **Fabric** que automatiza el encantado de equipo de netherite en el yunque. Eliges qué encantamientos quieres en cada pieza, abres un yunque y el mod coloca los libros y recoge los resultados por ti.
 
 ## Qué hace
 
@@ -30,7 +30,7 @@ El botón se usa en lugar de una tecla para que no se escriba nada en el campo d
 
 ## Instalación
 
-1. Instala [Fabric Loader](https://fabricmc.net/use/) para Minecraft 1.21.11.
+1. Instala [Fabric Loader](https://fabricmc.net/use/) para Minecraft.
 2. Descarga [Fabric API](https://modrinth.com/mod/fabric-api) y ponla en tu carpeta `mods`.
 3. Descarga el `.jar` de AutoAnvil desde la sección **Releases** y ponlo en la misma carpeta.
 

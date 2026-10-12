@@ -3,7 +3,7 @@ package com.welfarinas.autoanvil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
@@ -18,6 +18,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.lwjgl.glfw.GLFW;
 
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.welfarinas.autoanvil.AutoAnvilClient.tr;
 
@@ -434,7 +436,69 @@ public class ConfigScreen extends Screen {
         return info;
     }
 
-    private final class DelayBox extends EditBox {
+    /**
+     * EditBox con filtro: Minecraft 26.2 quitó EditBox.setFilter. Aplica el filtro a como quedaría el texto,
+     * igual que hacía Minecraft antes, y descarta el cambio si no lo cumple.
+     */
+    private static class FilteredEditBox extends EditBox {
+        private Predicate<String> filter = s -> true;
+        private int maxLength = 32;
+        private int highlightPos;
+
+        FilteredEditBox(Font font, int x, int y, int width, int height, Component message) {
+            super(font, x, y, width, height, message);
+        }
+
+        void setFilter(Predicate<String> filter) {
+            this.filter = filter;
+        }
+
+        @Override
+        public void setMaxLength(int maxLength) {
+            this.maxLength = maxLength;
+            super.setMaxLength(maxLength);
+        }
+
+        @Override
+        public void setHighlightPos(int pos) {
+            super.setHighlightPos(pos);
+            highlightPos = Math.clamp(pos, 0, getValue().length());
+        }
+
+        @Override
+        public void setValue(String value) {
+            if (!filter.test(value)) return;
+            super.setValue(value);
+        }
+
+        @Override
+        public void insertText(String text) {
+            int start = Math.min(getCursorPosition(), highlightPos);
+            int end = Math.max(getCursorPosition(), highlightPos);
+            int room = maxLength - getValue().length() - (start - end);
+            if (room > 0) {
+                String inserted = StringUtil.filterText(text);
+                if (room < inserted.length()) {
+                    if (Character.isHighSurrogate(inserted.charAt(room - 1))) room--;
+                    inserted = inserted.substring(0, room);
+                }
+                if (!filter.test(new StringBuilder(getValue()).replace(start, end, inserted).toString())) return;
+            }
+            super.insertText(text);
+        }
+
+        @Override
+        public void deleteCharsToPos(int pos) {
+            if (!getValue().isEmpty() && highlightPos == getCursorPosition()) {
+                int start = Math.min(pos, getCursorPosition());
+                int end = Math.max(pos, getCursorPosition());
+                if (start != end && !filter.test(new StringBuilder(getValue()).delete(start, end).toString())) return;
+            }
+            super.deleteCharsToPos(pos);
+        }
+    }
+
+    private final class DelayBox extends FilteredEditBox {
         DelayBox(Font font, int x, int y, int width, int height) {
             super(font, x, y, width, height, tr("config.delay"));
         }
@@ -456,7 +520,7 @@ public class ConfigScreen extends Screen {
         }
     }
 
-    private final class CountBox extends EditBox {
+    private final class CountBox extends FilteredEditBox {
         /** La pestaña donde se creó: el foco puede perderse después de cambiar de pestaña. */
         private final Piece piece;
 
@@ -582,24 +646,24 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(font, title, width / 2, 8, 0xFFFFFFFF);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.centeredText(font, title, width / 2, 8, 0xFFFFFFFF);
         if (countBox != null) {
-            graphics.drawString(font, COUNT_LABEL, countLabelX, 52, 0xFFFFFFFF);
+            graphics.text(font, COUNT_LABEL, countLabelX, 52, 0xFFFFFFFF);
         } else {
-            graphics.drawString(font, ALL_LABEL, countLabelX, 46, 0xFFFFFFFF);
-            graphics.drawString(font, detectedLabel(countInInventory(selected)), countLabelX, 57, 0xFFAAAAAA);
+            graphics.text(font, ALL_LABEL, countLabelX, 46, 0xFFFFFFFF);
+            graphics.text(font, detectedLabel(countInInventory(selected)), countLabelX, 57, 0xFFAAAAAA);
         }
         if (noWorld) {
-            graphics.drawCenteredString(font, tr("config.no_world"),
+            graphics.centeredText(font, tr("config.no_world"),
                     width / 2, GRID_TOP + 6, 0xFFFF5555);
         }
         // Texto pequeño encima del retardo.
         graphics.pose().pushMatrix();
         graphics.pose().translate(delayX, buttonsTop - 8);
         graphics.pose().scale(0.75f, 0.75f);
-        graphics.drawString(font, delayInfo(), 0, 0, 0xFFAAAAAA);
+        graphics.text(font, delayInfo(), 0, 0, 0xFFAAAAAA);
         graphics.pose().popMatrix();
 
         boolean hasStatus = !status.getString().isEmpty();
@@ -609,16 +673,16 @@ public class ConfigScreen extends Screen {
         for (Component line : counterLines) {
             for (FormattedCharSequence part : font.split(line, width - 20)) {
                 if (y > maxY) break outer;
-                graphics.drawCenteredString(font, part, width / 2, y, 0xFFFFFFFF);
+                graphics.centeredText(font, part, width / 2, y, 0xFFFFFFFF);
                 y += font.lineHeight + 1;
             }
         }
-        if (hasStatus) graphics.drawCenteredString(font, status, width / 2, buttonsTop - 22, 0xFFFFFF55);
+        if (hasStatus) graphics.centeredText(font, status, width / 2, buttonsTop - 22, 0xFFFFFF55);
     }
 
     @Override
     public void onClose() {
         normalizeCount();
-        minecraft.setScreen(parent);
+        minecraft.gui.setScreen(parent);
     }
 }

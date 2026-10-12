@@ -3,7 +3,7 @@ package com.welfarinas.autoanvil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.ChatFormatting;
@@ -31,7 +31,7 @@ public class AutoAnvilClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AnvilConfig.get();
-        configKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        configKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.autoanvil.config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(AutoAnvilClient::onTick);
@@ -40,7 +40,7 @@ public class AutoAnvilClient implements ClientModInitializer {
             // Encima del yunque (176x166), a la derecha.
             int left = (scaledWidth - 176) / 2;
             int top = (scaledHeight - 166) / 2;
-            Screens.getButtons(screen).add(Button.builder(tr("button.start"), b -> start(client))
+            Screens.getWidgets(screen).add(Button.builder(tr("button.start"), b -> start(client))
                     .bounds(left + 176 - 100, top - 22, 100, 20)
                     .tooltip(Tooltip.create(tr("button.start.tooltip")))
                     .build());
@@ -49,7 +49,7 @@ public class AutoAnvilClient implements ClientModInitializer {
 
     private static void onTick(Minecraft mc) {
         while (configKey.consumeClick()) {
-            if (mc.level != null && mc.screen == null) mc.setScreen(new ConfigScreen(null));
+            if (mc.level != null && mc.gui.screen() == null) mc.gui.setScreen(new ConfigScreen(null));
         }
         if (running != null) {
             running.tick(mc);
@@ -126,7 +126,7 @@ public class AutoAnvilClient implements ClientModInitializer {
     static void say(Component message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        mc.player.displayClientMessage(Component.literal("[AutoAnvil] ").withStyle(ChatFormatting.GOLD)
-                .append(message), false);
+        mc.player.sendSystemMessage(Component.literal("[AutoAnvil] ").withStyle(ChatFormatting.GOLD)
+                .append(message));
     }
 }
