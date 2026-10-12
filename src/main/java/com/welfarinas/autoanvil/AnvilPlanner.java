@@ -7,7 +7,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -376,7 +376,7 @@ final class AnvilPlanner {
         List<Target> targets = new ArrayList<>();
         boolean ok = true;
         for (var e : pc.enchantments.entrySet()) {
-            Identifier id = Identifier.tryParse(e.getKey());
+            ResourceLocation id = ResourceLocation.tryParse(e.getKey());
             Optional<Holder.Reference<Enchantment>> holder = id == null ? Optional.empty() : registry.get(id);
             if (holder.isEmpty()) {
                 problems.add(tr("problem.unknown", piece.label(), e.getKey()));
@@ -418,7 +418,7 @@ final class AnvilPlanner {
     }
 
     static String bookKey(Holder<Enchantment> holder, int level) {
-        return holder.unwrapKey().map(k -> k.identifier().toString()).orElse(holder.toString()) + "#" + level;
+        return holder.unwrapKey().map(k -> k.location().toString()).orElse(holder.toString()) + "#" + level;
     }
 
     static int repairCost(ItemStack stack) {

@@ -14,15 +14,13 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.AnvilMenu;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class AutoAnvilClient implements ClientModInitializer {
-    private static final KeyMapping.Category CATEGORY =
-            KeyMapping.Category.register(Identifier.fromNamespaceAndPath("autoanvil", "main"));
+    private static final String CATEGORY = "key.category.autoanvil.main";
     private static KeyMapping configKey;
     private static AnvilExecutor running;
     private static final long START_COOLDOWN_MS = 1000;
