@@ -16,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.AnvilMenu;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class AutoAnvilClient implements ClientModInitializer {
     public void onInitializeClient() {
         AnvilConfig.get();
         configKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.autoanvil.config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, CATEGORY));
+                "key.autoanvil.config", InputConstants.Type.KEYBOARD, InputConstants.KEY_P, CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(AutoAnvilClient::onTick);
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {

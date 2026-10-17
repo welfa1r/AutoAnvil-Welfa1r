@@ -20,7 +20,6 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.enchantment.Enchantment;
-import org.lwjgl.glfw.GLFW;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -353,8 +352,8 @@ public class ConfigScreen extends Screen {
     }
 
     private void stepCount(int direction) {
-        boolean shift = InputConstants.isKeyDown(minecraft.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)
-                || InputConstants.isKeyDown(minecraft.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean shift = InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
         setCount(working.piece(selected).count + direction * (shift ? 5 : 1));
     }
 
