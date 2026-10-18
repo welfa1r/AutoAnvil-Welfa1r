@@ -33,7 +33,7 @@ Mod de cliente para **Fabric** (Minecraft **1.21.11**) que automatiza el encanta
 
 ## Uso
 
-1. Pulsa la tecla del mod (configurable en *Opciones > Controles*, por defecto `K`) para abrir el menú.
+1. Pulsa la tecla del mod (configurable en *Opciones > Controles*, por defecto `P`) para abrir el menú.
 2. Elige una pestaña por pieza y marca los encantamientos y niveles que quieres.
 3. Ten en el inventario las piezas de netherite y un libro por cada encantamiento.
 4. Abre un yunque y pulsa el botón **Auto-encantar**.
