@@ -8,9 +8,8 @@
   <a href="https://github.com/welfa1r/AutoAnvilClient/issues"><img src="https://img.shields.io/badge/Reportar-Bug-d73a4a?logo=github&logoColor=white&style=for-the-badge" alt="Issues"></a>
   <a href="https://modrinth.com/mod/fabric-api"><img src="https://img.shields.io/badge/Requiere-Fabric%20API-dbb69b?style=for-the-badge" alt="Fabric API"></a>
   <a href="https://paypal.me/welfarinas"><img src="https://img.shields.io/badge/Donar-PayPal-00457C?logo=paypal&logoColor=white&style=for-the-badge" alt="PayPal"></a>
+  <a href="https://img.shields.io/badge/Discord-welfa1r-5865F2?logo=discord&logoColor=white&style=for-the-badge)](https://discord.com/users/839624385349419038"></a>
 </p>
-
-[![Discord](https://img.shields.io/badge/Discord-welfa1r-5865F2?logo=discord&logoColor=white&style=for-the-badge)](https://discord.com/users/839624385349419038)
 
 Mod de cliente para **Fabric** (Minecraft **1.21.11**) que automatiza el encantado de equipo de netherite en el yunque. Eliges qué encantamientos quieres en cada pieza, abres un yunque y el mod coloca los libros y recoge los resultados por ti.
 
