@@ -10,8 +10,6 @@
   <a href="https://paypal.me/welfarinas"><img src="https://img.shields.io/badge/Donar-PayPal-00457C?logo=paypal&logoColor=white&style=for-the-badge" alt="PayPal"></a>
 </p>
 
-![Demo](demo.gif)
-
 Mod de cliente para **Fabric** (Minecraft **1.21.11**) que automatiza el encantado de equipo de netherite en el yunque. Eliges qué encantamientos quieres en cada pieza, abres un yunque y el mod coloca los libros y recoge los resultados por ti.
 
 ## Qué hace
@@ -22,6 +20,7 @@ Mod de cliente para **Fabric** (Minecraft **1.21.11**) que automatiza el encanta
 - La **XP se comprueba paso a paso**: cada uso del yunque se hace en cuanto puedes pagarlo. El total de una pieza es solo informativo.
 - Solo funciona con el **yunque abierto**. En cualquier otra pantalla no actúa.
 - Aplica los libros pieza a pieza, esperando la respuesta del servidor entre pasos.
+![Demo](demo.gif)
 
 ## Opciones
 
