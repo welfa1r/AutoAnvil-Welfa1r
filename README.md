@@ -61,3 +61,14 @@ Las mejoras son bienvenidas: abre un *issue* o un *pull request*.
 ## Licencia
 
 MIT. Consulta el archivo `LICENSE`.
+
+## Versiones
+
+Cada versión de Minecraft tiene su propia rama con su código. Descarga el `.jar` que coincide con tu juego desde [Releases](https://github.com/welfa1r/AutoAnvil-Welfa1r/releases) o [Modrinth](https://modrinth.com/mod/autoanvil-welfa1r).
+
+| Minecraft | Java | Código |
+|---|---|---|
+| 26.3 | 25 | [mc-26.3](https://github.com/welfa1r/AutoAnvil-Welfa1r/tree/mc-26.3) |
+| 26.2 | 25 | [mc-26.2](https://github.com/welfa1r/AutoAnvil-Welfa1r/tree/mc-26.2) |
+| 1.21.11 | 21 | [mc-1.21.11](https://github.com/welfa1r/AutoAnvil-Welfa1r/tree/mc-1.21.11) |
+| 1.21.8 | 21 | [mc-1.21.8](https://github.com/welfa1r/AutoAnvil-Welfa1r/tree/mc-1.21.8) |
