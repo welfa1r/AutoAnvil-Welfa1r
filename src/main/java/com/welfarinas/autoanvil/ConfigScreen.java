@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
@@ -14,7 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -350,8 +351,8 @@ public class ConfigScreen extends Screen {
     }
 
     private void stepCount(int direction) {
-        boolean shift = InputConstants.isKeyDown(minecraft.getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)
-                || InputConstants.isKeyDown(minecraft.getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean shift = InputConstants.isKeyDown(minecraft.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)
+                || InputConstants.isKeyDown(minecraft.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
         setCount(working.piece(selected).count + direction * (shift ? 5 : 1));
     }
 
@@ -446,12 +447,12 @@ public class ConfigScreen extends Screen {
         }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+        public boolean keyPressed(KeyEvent event) {
+            if (event.isConfirmation()) {
                 normalizeDelay();
                 return true;
             }
-            return super.keyPressed(keyCode, scanCode, modifiers);
+            return super.keyPressed(event);
         }
     }
 
@@ -478,16 +479,16 @@ public class ConfigScreen extends Screen {
         }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+        public boolean keyPressed(KeyEvent event) {
+            if (event.isConfirmation()) {
                 normalize();
                 return true;
             }
-            if (keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_DOWN) {
-                setCount(working.piece(selected).count + (keyCode == GLFW.GLFW_KEY_UP ? 1 : -1));
+            if (event.isUp() || event.isDown()) {
+                setCount(working.piece(selected).count + (event.isUp() ? 1 : -1));
                 return true;
             }
-            return super.keyPressed(keyCode, scanCode, modifiers);
+            return super.keyPressed(event);
         }
     }
 
@@ -502,7 +503,7 @@ public class ConfigScreen extends Screen {
     }
 
     private static String id(Holder.Reference<Enchantment> holder) {
-        return holder.key().location().toString();
+        return holder.key().identifier().toString();
     }
 
     /** "1. Prot. contra fuego: IV" */
@@ -568,7 +569,7 @@ public class ConfigScreen extends Screen {
         MutableComponent removed = null;
         Iterator<Map.Entry<String, Integer>> it = pc.enchantments.entrySet().iterator();
         while (it.hasNext()) {
-            ResourceLocation parsed = ResourceLocation.tryParse(it.next().getKey());
+            Identifier parsed = Identifier.tryParse(it.next().getKey());
             Optional<Holder.Reference<Enchantment>> other = parsed == null ? Optional.empty() : registry.get(parsed);
             if (other.isEmpty() || other.get().equals(chosen)) continue;
             if (!Enchantment.areCompatible(chosen, other.get())) {
